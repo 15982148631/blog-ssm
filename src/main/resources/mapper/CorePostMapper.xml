@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wyf.blog.ssm.mapper.CorePostMapper">
+  <resultMap id="BaseResultMap" type="com.wyf.blog.ssm.pojo.domain.CorePost">
+    <!--@mbg.generated generated on Sat Feb 20 14:19:04 CST 2021.-->
+    <!--@Table core_post-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="post_author" jdbcType="BIGINT" property="postAuthor" />
+    <result column="post_content" jdbcType="LONGVARCHAR" property="postContent" />
+    <result column="post_title" jdbcType="LONGVARCHAR" property="postTitle" />
+    <result column="post_excerpt" jdbcType="LONGVARCHAR" property="postExcerpt" />
+    <result column="post_status" jdbcType="VARCHAR" property="postStatus" />
+    <result column="comment_status" jdbcType="VARCHAR" property="commentStatus" />
+    <result column="post_name" jdbcType="VARCHAR" property="postName" />
+    <result column="post_content_filtered" jdbcType="LONGVARCHAR" property="postContentFiltered" />
+    <result column="post_parent" jdbcType="BIGINT" property="postParent" />
+    <result column="guid" jdbcType="VARCHAR" property="guid" />
+    <result column="menu_order" jdbcType="INTEGER" property="menuOrder" />
+    <result column="post_type" jdbcType="VARCHAR" property="postType" />
+    <result column="post_mime_type" jdbcType="VARCHAR" property="postMimeType" />
+    <result column="comment_count" jdbcType="BIGINT" property="commentCount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated generated on Sat Feb 20 14:19:04 CST 2021.-->
+    id, post_author, post_content, post_title, post_excerpt, post_status, comment_status, 
+    post_name, post_content_filtered, post_parent, guid, menu_order, post_type, post_mime_type, 
+    comment_count, create_time, update_time
+  </sql>
+</mapper>
