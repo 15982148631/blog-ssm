@@ -3,6 +3,8 @@ package com.wyf.blog.ssm.controller;
 import com.wyf.blog.ssm.exception.ErrorEnum;
 import com.wyf.blog.ssm.pojo.vo.ResultData;
 import com.wyf.blog.ssm.utils.JsonUtils;
+import com.wyf.blog.ssm.utils.ShiroUtils;
+import io.swagger.annotations.Api;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
@@ -20,7 +22,9 @@ import static com.wyf.blog.ssm.utils.ShiroUtils.MD5Pwd;
  * @Date 2021/2/22 9:37
  * @Version 1.0.0
  */
+@Api(tags = "登录管理")
 @Controller
+@CrossOrigin//处理跨域
 public class LoginController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)

@@ -3,6 +3,7 @@ package com.wyf.blog.ssm.config;
 import com.wyf.blog.ssm.pojo.domain.CoreAdmin;
 import com.wyf.blog.ssm.service.api.CoreAdminService;
 import com.wyf.blog.ssm.service.api.LoginService;
+import com.wyf.blog.ssm.utils.ShiroUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -76,7 +77,7 @@ public class MyCustomRealm extends AuthorizingRealm {
         //根据用户名从数据库获取密码
         CoreAdmin admin = new CoreAdmin();
         admin.setNickname(userName);
-        admin.setPassword(userPwd);
+        admin.setPassword(ShiroUtils.MD5Pwd(userName,userPwd));
         CoreAdmin user = coreAdminService.getAdminByExample(admin);
 
         if (user == null) {
