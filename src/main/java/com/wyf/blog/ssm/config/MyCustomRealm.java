@@ -9,6 +9,9 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
@@ -23,6 +26,8 @@ import java.util.Set;
  * @Version 1.0.0
  */
 public class MyCustomRealm extends AuthorizingRealm {
+
+    private Logger logger =  LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private LoginService loginService;
@@ -81,8 +86,8 @@ public class MyCustomRealm extends AuthorizingRealm {
             // 这里验证authenticationToken和simpleAuthenticationInfo的信息
             //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
 
-            SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(admin,
-                    user.getPassword(),  user.getNickname());
+            SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(userName, user.getPassword(),
+                    ByteSource.Util.bytes(userName + "salt"), getName());
             return simpleAuthenticationInfo;
         }
     }
