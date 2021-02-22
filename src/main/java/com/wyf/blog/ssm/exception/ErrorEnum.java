@@ -2,7 +2,7 @@ package com.wyf.blog.ssm.exception;
 
 /**
 
- * @Description 错误枚举
+ * @Description 异常错误提示枚举
  * @Date  2020/10/28 11:54
  * @Param
  * @return

@@ -17,6 +17,15 @@ public interface CoreAdminService{
 
     /***
      * @Author wyf
+     * @Description 获取指定管理员数据
+     * @Date  2021/2/22 13:22
+     * @Param [admin]
+     * @return com.wyf.blog.ssm.pojo.domain.CoreAdmin
+     **/
+    CoreAdmin getAdminByExample(CoreAdmin admin);
+
+    /***
+     * @Author wyf
      * @Description 获取管理员列表
      * @Date  2020/11/13 16:50
      * @Param [i, i1, tbUser]
@@ -54,6 +63,5 @@ public interface CoreAdminService{
 
     @Deprecated//过时使用注解
     int getAdmin(long id);
-
 
 }

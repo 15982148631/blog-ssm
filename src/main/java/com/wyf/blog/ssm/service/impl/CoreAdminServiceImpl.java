@@ -13,7 +13,10 @@ import com.wyf.blog.ssm.mapper.CoreAdminMapper;
 import com.wyf.blog.ssm.pojo.domain.CoreAdmin;
 import com.wyf.blog.ssm.service.api.CoreAdminService;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /***
@@ -58,6 +61,20 @@ public class CoreAdminServiceImpl implements CoreAdminService{
          redisTemplate.expire(prikey, RedisStaticStr.ADMIN_USER_KEY.getTimeNum(), TimeUnit.SECONDS);
         return JsonUtils.jsonToPojo(obj.toString(),CoreAdmin.class);
     }
+
+    @Override
+    public CoreAdmin getAdminByExample(CoreAdmin admin){
+        Example example = new Example(CoreAdmin.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("nickname",admin.getNickname());
+        criteria.andEqualTo("password",admin.getPassword());
+        List<CoreAdmin> coreAdmins = coreAdminMapper.selectByExample(example);
+        if (coreAdmins == null || coreAdmins.size()!=1){
+            return null;
+        }
+        return coreAdmins.get(0);
+    }
+
 
     @Override
     public PageInfo page(int i, int i1, CoreAdmin tbUser) {

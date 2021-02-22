@@ -49,5 +49,5 @@ logging:
       wyf:
         blog:
           ssm:
-            mapper: debug
+            mapper: info
 #  config: classpath:logback.xml
