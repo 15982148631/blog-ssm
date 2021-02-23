@@ -19,4 +19,14 @@ public interface LoginService {
      * @return java.util.List<java.lang.String>
      **/
     List<String> getUserAuth(String username);
+
+
+    /***
+     * @Author wyf
+     * @Description 退出
+     * @Date  2021/2/23 14:12
+     * @Param []
+     * @return void
+     **/
+    void logout();
 }

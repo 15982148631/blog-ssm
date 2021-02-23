@@ -46,15 +46,17 @@ public class MyCustomRealm extends AuthorizingRealm {
      **/
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        String username = (String) SecurityUtils.getSubject().getPrincipal();
+        logger.info("开始执行授权操作.......");
+        CoreAdmin admin = (CoreAdmin) SecurityUtils.getSubject().getPrincipal();
 
-        List<String> userAuth = loginService.getUserAuth(username);
+        List<String> userAuth = loginService.getUserAuth(admin.getNickname());
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         Set<String> stringSet = new HashSet<>();
         for (String auth:userAuth) {
             stringSet.add(auth);
         }
         info.setStringPermissions(stringSet);
+        logger.info("授权操作完成.......");
         return info;
     }
 
@@ -64,7 +66,7 @@ public class MyCustomRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        System.out.println("-------身份认证方法--------");
+        logger.info("-------身份认证方法--------");
         String userName = (String) authenticationToken.getPrincipal();
         String userPwd = new String((char[]) authenticationToken.getCredentials());
 
@@ -87,7 +89,7 @@ public class MyCustomRealm extends AuthorizingRealm {
             // 这里验证authenticationToken和simpleAuthenticationInfo的信息
             //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
 
-            SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(userName, user.getPassword(),
+            SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(user, user.getPassword(),
                     ByteSource.Util.bytes(userName + "salt"), getName());
             return simpleAuthenticationInfo;
         }

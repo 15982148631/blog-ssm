@@ -1,16 +1,26 @@
 package com.wyf.blog.ssm.config;
 
+import lombok.Data;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.SimpleCookie;
+import org.crazycake.shiro.RedisCacheManager;
+import org.crazycake.shiro.RedisManager;
+import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
+
+import java.time.Duration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -22,13 +32,25 @@ import java.util.Map;
  * @Version 1.0.0
  */
 @Configuration
+@ConfigurationProperties(prefix = "spring.redis")
+@Data
 public class ShiroConfig {
+
+    private String host = "localhost";
+    private int port = 6379;
+    private String password;
+    private Duration timeout;
+
 
     // 权限管理，配置主要是Realm的管理认证
     @Bean
     public SecurityManager securityManager() {
         DefaultWebSecurityManager defaultSecurityManager = new DefaultWebSecurityManager();
         defaultSecurityManager.setRealm(customRealm());
+        // 自定义session管理 使用redis
+        defaultSecurityManager.setSessionManager(sessionManager());
+        // 自定义缓存实现 使用redis
+        defaultSecurityManager.setCacheManager(cacheManager());
         return defaultSecurityManager;
     }
 
@@ -41,7 +63,6 @@ public class ShiroConfig {
         customRealm.setCachingEnabled(false);
         return customRealm;
     }
-
 
 
     /***
@@ -58,9 +79,6 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
-        shiroFilterFactoryBean.setLoginUrl("/login");
-        shiroFilterFactoryBean.setUnauthorizedUrl("/notRole");
-
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 
         // 登出
@@ -74,8 +92,11 @@ public class ShiroConfig {
 
         // 对所有用户认证
         filterChainDefinitionMap.put("/**", "authc");
+        // 配器shirot认登录累面地址，前后端分离中登录累面跳转应由前端路由控制，后台仅返回json数据, 对应LoginController中unauth请求
+        shiroFilterFactoryBean.setLoginUrl("/unauth");
 
-        shiroFilterFactoryBean.setUnauthorizedUrl("/error");
+        // 未授权界面, 对应LoginController中 unauthorized 请求
+        shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
@@ -83,11 +104,90 @@ public class ShiroConfig {
     }
 
 
-    //aop
+    /**
+     * RedisSessionDAO shiro sessionDao层的实现 通过redis, 使用的是shiro-redis开源插件
+     * create by: leigq
+     * create time: 2019/7/3 14:30
+     *
+     * @return RedisSessionDAO
+     */
     @Bean
-    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
-        return new LifecycleBeanPostProcessor();
+    public RedisSessionDAO redisSessionDAO() {
+        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
+        redisSessionDAO.setRedisManager(redisManager());
+        redisSessionDAO.setSessionIdGenerator(sessionIdGenerator());
+        redisSessionDAO.setExpire(1800);
+        return redisSessionDAO;
     }
+
+    /**
+     * Session ID 生成器
+     * <br/>
+     * create by: leigq
+     * <br/>
+     * create time: 2019/7/3 16:08
+     *
+     * @return JavaUuidSessionIdGenerator
+     */
+    @Bean
+    public JavaUuidSessionIdGenerator sessionIdGenerator() {
+        return new JavaUuidSessionIdGenerator();
+    }
+
+    /**
+     * 自定义sessionManager
+     * create by: leigq
+     * create time: 2019/7/3 14:31
+     *
+     * @return SessionManager
+     */
+    @Bean
+    public SessionManager sessionManager() {
+        MySessionManager mySessionManager = new MySessionManager();
+        mySessionManager.setSessionDAO(redisSessionDAO());
+        return mySessionManager;
+    }
+
+    /**
+     * 配置shiro redisManager, 使用的是shiro-redis开源插件
+     * <br/>
+     * create by: leigq
+     * <br/>
+     * create time: 2019/7/3 14:33
+     *
+     * @return RedisManager
+     */
+    private RedisManager redisManager() {
+        RedisManager redisManager = new RedisManager();
+        redisManager.setHost(host);
+        redisManager.setPort(port);
+        redisManager.setTimeout((int) timeout.toMillis());
+        redisManager.setPassword(password);
+        return redisManager;
+    }
+
+    /**
+     * cacheManager 缓存 redis实现, 使用的是shiro-redis开源插件
+     * create by: leigq
+     * <br/>
+     * create time: 2019/7/3 14:33
+     * @return RedisCacheManager
+     */
+    @Bean
+    public RedisCacheManager cacheManager() {
+        RedisCacheManager redisCacheManager = new RedisCacheManager();
+        redisCacheManager.setRedisManager(redisManager());
+        // 必须要设置主键名称，shiro-redis 插件用过这个缓存用户信息
+        redisCacheManager.setPrincipalIdFieldName("userId");
+        return redisCacheManager;
+    }
+
+
+    //aop
+//    @Bean
+//    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
+//        return new LifecycleBeanPostProcessor();
+//    }
 
     /**
      * *
@@ -96,7 +196,7 @@ public class ShiroConfig {
      * * @return
      */
     @Bean
-    @DependsOn({"lifecycleBeanPostProcessor"})//aop
+    //@DependsOn({"lifecycleBeanPostProcessor"})//aop
     public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator() {
         DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
         advisorAutoProxyCreator.setProxyTargetClass(true);
@@ -121,5 +221,20 @@ public class ShiroConfig {
         // storedCredentialsHexEncoded默认是true，此时用的是密码加密用的是Hex编码；false时用Base64编码
         hashedCredentialsMatcher.setStoredCredentialsHexEncoded(true);
         return hashedCredentialsMatcher;
+    }
+
+
+
+
+
+
+    @Bean
+    public SimpleCookie cookie() {
+        // cookie的name,对应的默认是 JSESSIONID
+        SimpleCookie cookie = new SimpleCookie("SHARE_JSESSIONID");
+        cookie.setHttpOnly(true);
+        //  path为 / 用于多个系统共享 JSESSIONID
+        cookie.setPath("/");
+        return cookie;
     }
 }

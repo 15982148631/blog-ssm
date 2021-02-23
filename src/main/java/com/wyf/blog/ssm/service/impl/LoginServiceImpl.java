@@ -5,6 +5,8 @@ import com.wyf.blog.ssm.mapper.CoreAuthMapper;
 import com.wyf.blog.ssm.mapper.CoreRoleMapper;
 import com.wyf.blog.ssm.pojo.domain.CoreAdmin;
 import com.wyf.blog.ssm.service.api.LoginService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,5 +48,11 @@ public class LoginServiceImpl implements LoginService {
         }
 
         return coreAuthMapper.getUserAuth(list.get(0).getId());
+    }
+
+    @Override
+    public void logout() {
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
     }
 }
