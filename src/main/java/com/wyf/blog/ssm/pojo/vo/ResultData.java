@@ -1,9 +1,12 @@
 package com.wyf.blog.ssm.pojo.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wyf.blog.ssm.exception.BusinessException;
 import com.wyf.blog.ssm.exception.ErrorEnum;
+import com.wyf.blog.ssm.utils.JsonUtils;
+import net.minidev.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,6 +14,8 @@ import java.util.List;
 /**
  * 自定义返回页面响应结构
  */
+//解决databind.exc.InvalidDefinitionException
+@JsonIgnoreProperties(value={"hibernateLazyInitializer","handler","fieldHandler"})
 public class ResultData implements Serializable{
 
 
@@ -20,20 +25,20 @@ public class ResultData implements Serializable{
      */
     private static final long serialVersionUID = -2496672594279324524L;
 
-    /* 定义jackson对象*/
+    /** 定义jackson对象*/
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    /*是否成功*/
+    /**是否成功*/
     private Boolean success;
 
     /**响应业务状态*/
     private Integer status;
 
-    /*响应消息*/
+    /**响应消息*/
     private String msg;
 
     /**响应中的数据 */
-    private Object data;
+    private String data;
 
     public static ResultData build(Integer status, String msg, Object data) {
         return new ResultData(status, msg, data);
@@ -58,13 +63,13 @@ public class ResultData implements Serializable{
     public ResultData(Integer status, String msg, Object data) {
         this.status = status;
         this.msg = msg;
-        this.data = data;
+        this.data = JsonUtils.objectToJson(data);
     }
 
     public ResultData(Object data) {
         this.status = 200;
         this.msg = "OK";
-        this.data = data;
+        this.data = JsonUtils.objectToJson(data);
     }
 
     public Boolean isOK() {
@@ -92,7 +97,7 @@ public class ResultData implements Serializable{
     }
 
     public void setData(Object data) {
-        this.data = data;
+        this.data = JsonUtils.objectToJson(data);
     }
 
     public Boolean getSuccess() {

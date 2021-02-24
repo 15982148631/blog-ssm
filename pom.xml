@@ -34,6 +34,7 @@
         <redisson.version>3.11.1</redisson.version>
         <shiro.version>1.4.0</shiro.version>
         <shiro-redis.version>3.1.0</shiro-redis.version>
+        <jackson.version>2.9.9</jackson.version>
     </properties>
 
     <dependencies>
@@ -67,7 +68,12 @@
             <version>${springfox.version}</version>
         </dependency>
 
-        <!-- Jackson -->
+        <!-- Jackson-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -134,17 +140,6 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-
-        <!--修改thymeleaf默认的校验规则-->
-        <dependency>
-            <groupId>net.sourceforge.nekohtml</groupId>
-            <artifactId>nekohtml</artifactId>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->

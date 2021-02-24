@@ -93,7 +93,7 @@ public class ShiroConfig {
         // 对所有用户认证
         filterChainDefinitionMap.put("/**", "authc");
         // 配器shirot认登录累面地址，前后端分离中登录累面跳转应由前端路由控制，后台仅返回json数据, 对应LoginController中unauth请求
-        shiroFilterFactoryBean.setLoginUrl("/unauth");
+        shiroFilterFactoryBean.setLoginUrl("/unLogin");
 
         // 未授权界面, 对应LoginController中 unauthorized 请求
         shiroFilterFactoryBean.setUnauthorizedUrl("/unauthorized");

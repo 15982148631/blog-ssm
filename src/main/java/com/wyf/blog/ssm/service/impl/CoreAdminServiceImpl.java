@@ -33,21 +33,10 @@ public class CoreAdminServiceImpl implements CoreAdminService{
 
     @Autowired
     private RedisTemplate redisTemplate;
-    
+
     @Resource
     private CoreAdminMapper coreAdminMapper;
 
-
-    /**需要调整成此redis序列化方式，否则会出现乱码key*/
-    @Autowired(required = false)
-    public void setRedisTemplate(RedisTemplate redisTemplate) {
-        RedisSerializer stringSerializer = new StringRedisSerializer();
-        redisTemplate.setKeySerializer(stringSerializer);
-        redisTemplate.setValueSerializer(stringSerializer);
-        redisTemplate.setHashKeySerializer(stringSerializer);
-        redisTemplate.setHashValueSerializer(stringSerializer);
-        this.redisTemplate = redisTemplate;
-    }
 
     @Override
     public CoreAdmin getAdminByPrimerkey(long key){

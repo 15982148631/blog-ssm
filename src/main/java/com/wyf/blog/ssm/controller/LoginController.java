@@ -33,18 +33,6 @@ public class LoginController {
     private LoginService loginService;
 
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String defaultLogin() {
-        return "首页";
-    }
-
-    @RequestMapping(value = "/error", method = RequestMethod.GET)
-    public String defaultError() {
-
-        return "错误页";
-    }
-
-
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public String login(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("remember") String remember) {
@@ -112,10 +100,9 @@ public class LoginController {
      * create time: 2019/6/28 17:37
      */
     @GetMapping("/logout")
-    public String logOut() {
+    public ResultData logOut() {
         loginService.logout();
-        ResultData data = new ResultData(ErrorEnum.SUCCESS.getErrorCode(), ErrorEnum.SUCCESS.getErrorMsg(), new Object());
-        return JsonUtils.objectToJson(data);
+        return new ResultData(ErrorEnum.SUCCESS.getErrorCode(), ErrorEnum.SUCCESS.getErrorMsg(), new Object());
     }
 
 
@@ -128,9 +115,10 @@ public class LoginController {
      * @return
      */
     @RequestMapping("/unLogin")
-    public String unAuth() {
-        ResultData data = new ResultData(ErrorEnum.NO_AUTH.getErrorCode(), ErrorEnum.NO_AUTH.getErrorMsg(), new Object());
-        return JsonUtils.objectToJson(data);
+    @ResponseBody
+    public ResultData unLogin() {
+
+        return  new ResultData(ErrorEnum.NO_AUTH.getErrorCode(), ErrorEnum.NO_AUTH.getErrorMsg(), new Object());
     }
 
     /**
@@ -140,9 +128,10 @@ public class LoginController {
      * @return
      */
     @RequestMapping("/unauthorized")
-    public String unauthorized() {
-        ResultData data = new ResultData(ErrorEnum.NO_PERMISSION.getErrorCode(),ErrorEnum.NO_PERMISSION.getErrorMsg(), new Object());
-        return JsonUtils.objectToJson(data);
+    @ResponseBody
+    public ResultData unauthorized() {
+
+        return new ResultData(ErrorEnum.NO_PERMISSION.getErrorCode(),ErrorEnum.NO_PERMISSION.getErrorMsg(), new Object());
     }
 
 }

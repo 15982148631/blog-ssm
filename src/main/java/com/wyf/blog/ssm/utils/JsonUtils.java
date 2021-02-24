@@ -3,6 +3,7 @@ package com.wyf.blog.ssm.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 
 import java.util.List;
 
@@ -33,6 +34,8 @@ public class JsonUtils {
         try {
             String string = MAPPER.writeValueAsString(data);
             return string;
+        } catch (InvalidDefinitionException e){
+            e.printStackTrace();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

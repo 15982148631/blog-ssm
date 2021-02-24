@@ -11,8 +11,12 @@ import com.wyf.blog.ssm.pojo.vo.ResultTabData;
 import com.wyf.blog.ssm.service.api.CorePostService;
 import com.wyf.blog.ssm.utils.JsonUtils;
 import io.swagger.annotations.Api;
+import org.crazycake.shiro.RedisManager;
+import org.redisson.Redisson;
+import org.redisson.api.RLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +48,6 @@ public class CorePostController {
     @PostMapping("/getPostByKey")
     public String  test(String id){
         Long aLong = Long.valueOf(id);
-
         CorePost user = corePostService.getCorePostByPrimerkey(aLong);
         logger.info("用户获取ID为："+id+"的数据为："+ JsonUtils.objectToJson(user).toString());
 
