@@ -11,8 +11,6 @@ import java.io.Serializable;
 /**
  * 自定义返回页面响应结构
  */
-@Component
-@Scope("prototype")
 @Data
 public class ResultData implements Serializable{
 

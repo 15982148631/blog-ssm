@@ -13,8 +13,6 @@ import java.util.List;
  * 创建者：  xiaowang
  * 创建时间：2019/3/20
  */
-@Component
-@Scope("prototype")
 @Data
 public class ResultTabData implements Serializable{
 
