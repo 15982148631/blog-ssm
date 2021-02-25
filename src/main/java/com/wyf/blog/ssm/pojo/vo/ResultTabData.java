@@ -1,5 +1,9 @@
 package com.wyf.blog.ssm.pojo.vo;
 
+import lombok.Data;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -9,8 +13,11 @@ import java.util.List;
  * 创建者：  xiaowang
  * 创建时间：2019/3/20
  */
-
+@Component
+@Scope("prototype")
+@Data
 public class ResultTabData implements Serializable{
+
     //状态
     private  Integer code;
 
@@ -29,51 +36,5 @@ public class ResultTabData implements Serializable{
     //返回数据
     private List<?> data;
 
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public List<?> getData() {
-        return data;
-    }
-    public void setData(List<?> data) {
-        this.data = data;
-    }
-
-    public long getPage() {
-        return page;
-    }
-
-    public void setPage(long page) {
-        this.page = page;
-    }
-
-    public Integer getRows() {
-        return rows;
-    }
-
-    public void setRows(Integer rows) {
-        this.rows = rows;
-    }
-
-    public Integer getTotal() {
-        return total;
-    }
-
-    public void setTotal(Integer total) {
-        this.total = total;
-    }
 
 }

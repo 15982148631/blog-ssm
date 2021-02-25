@@ -1,5 +1,6 @@
 package com.wyf.blog.ssm.filter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -14,11 +15,14 @@ import java.io.IOException;
  * @Date 2021/2/22 9:59
  * @Version 1.0.0
  */
-//@Component
+@Component
+@Slf4j
 public class CorsFilter implements Filter {
+
+
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        System.out.println("FilterConfig init");
+    public void init(FilterConfig filterConfig){
+        log.info("CorsFilter init");
     }
 
     @Override
@@ -37,6 +41,6 @@ public class CorsFilter implements Filter {
 
     @Override
     public void destroy() {
-
+        log.info("CorsFilter destroy");
     }
 }

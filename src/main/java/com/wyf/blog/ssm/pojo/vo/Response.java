@@ -27,7 +27,6 @@ import java.io.Serializable;
  */
 @Component
 @Scope("prototype")
-@SuppressWarnings(value = "all")
 public class Response implements Serializable {
 
 
