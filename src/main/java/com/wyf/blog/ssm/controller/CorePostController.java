@@ -11,6 +11,7 @@ import com.wyf.blog.ssm.pojo.vo.ResultTabData;
 import com.wyf.blog.ssm.service.api.CorePostService;
 import com.wyf.blog.ssm.utils.JsonUtils;
 import io.swagger.annotations.Api;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.crazycake.shiro.RedisManager;
 import org.redisson.Redisson;
 import org.redisson.api.RLock;
@@ -45,6 +46,7 @@ public class CorePostController {
     private CorePostService corePostService;
 
 
+    @RequiresPermissions("113")
     @PostMapping("/getPostByKey")
     public String  test(String id){
         Long aLong = Long.valueOf(id);

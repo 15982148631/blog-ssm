@@ -1,8 +1,6 @@
 package com.wyf.blog.ssm.pojo.vo;
 
 import lombok.Data;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,6 +13,9 @@ import java.util.List;
  */
 @Data
 public class ResultTabData implements Serializable{
+
+
+    private static final long serialVersionUID = 1558728248887638889L;
 
     //状态
     private  Integer code;

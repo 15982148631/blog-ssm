@@ -22,6 +22,7 @@ import java.util.List;
  */
 @Configuration
 public class SwaggerConfig {
+
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)

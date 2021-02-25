@@ -47,6 +47,8 @@ public class Response implements Serializable {
      */
     private static final String DEAFAULT_FAILURE_MSG = "请求/处理失败！";
 
+    private static final long serialVersionUID = -4777971209082515204L;
+
     @Getter
     private Meta meta;
 

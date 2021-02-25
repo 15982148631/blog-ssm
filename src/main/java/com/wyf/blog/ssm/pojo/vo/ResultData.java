@@ -3,8 +3,6 @@ package com.wyf.blog.ssm.pojo.vo;
 import com.wyf.blog.ssm.exception.BusinessException;
 import com.wyf.blog.ssm.exception.ErrorEnum;
 import lombok.Data;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 

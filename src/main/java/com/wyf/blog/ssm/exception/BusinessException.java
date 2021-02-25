@@ -8,6 +8,7 @@ package com.wyf.blog.ssm.exception;
  * @Version 1.0.0
  */
 public class BusinessException extends RuntimeException {
+
     private static final long serialVersionUID = 1L;
     /**
      * 错误状态码

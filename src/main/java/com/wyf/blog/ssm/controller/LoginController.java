@@ -10,6 +10,8 @@ import io.swagger.annotations.Api;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +30,8 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @CrossOrigin//处理跨域
 public class LoginController {
+
+    private Logger logger =  LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private LoginService loginService;

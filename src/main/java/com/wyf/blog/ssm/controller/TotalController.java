@@ -19,5 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/total")
 @CrossOrigin//处理跨域
 public class TotalController {
+
     private final Logger logger = LoggerFactory.getLogger(TotalController.class);
 }
