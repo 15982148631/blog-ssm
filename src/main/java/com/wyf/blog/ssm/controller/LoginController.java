@@ -1,5 +1,6 @@
 package com.wyf.blog.ssm.controller;
 
+import com.wyf.blog.ssm.config.ThreadPoolConfig;
 import com.wyf.blog.ssm.exception.ErrorEnum;
 import com.wyf.blog.ssm.pojo.domain.CoreAdmin;
 import com.wyf.blog.ssm.pojo.vo.CacheUser;
@@ -37,10 +38,18 @@ public class LoginController {
     private LoginService loginService;
 
 
+    /***
+     * @Author wyf
+     * @Description 登录
+     * @Date  2021/3/2 16:29
+     * @Param [username, password, remember]
+     * @return java.lang.String
+     **/
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public String login(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("remember") String remember) {
 
+        logger.info("时间戳:" + System.currentTimeMillis() + "-->登录用户：" + username);
         if (StringUtils.isEmpty(username)) {
             ResultData result = new ResultData(-1, "用户名未填写", null);
             return JsonUtils.objectToJson(result);
@@ -105,6 +114,8 @@ public class LoginController {
      */
     @GetMapping("/logout")
     public ResultData logOut() {
+        //ThreadPoolConfig.executor.execute(()-> System.out.println("test"));
+
         loginService.logout();
         return new ResultData(ErrorEnum.SUCCESS.getErrorCode(), ErrorEnum.SUCCESS.getErrorMsg(), new Object());
     }
