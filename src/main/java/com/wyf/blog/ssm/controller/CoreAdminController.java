@@ -48,7 +48,7 @@ public class CoreAdminController {
      * @return java.lang.String
      **/
     @PostMapping("/getUserByKey")
-    public String  test(String id){
+    public ResultData  test(String id){
         Long aLong = Long.valueOf(id);
         //coreAdminService.getAdmin(aLong);
         CoreAdmin user = coreAdminService.getAdminByPrimerkey(aLong);
@@ -56,14 +56,14 @@ public class CoreAdminController {
 
         if (user != null){
             ResultData result = new ResultData(user);
-            return JsonUtils.objectToJson(result);
+            return result;
         }
         ResultData result = new  ResultData(ErrorEnum.NOT_FOUND.getErrorCode(), ErrorEnum.NOT_FOUND.getErrorMsg(),null);
         //全局自定义异常：
 //        if (user == null){
 //            throw new BusinessException(ErrorEnum.NO_PERMISSION.getErrorCode(), ErrorEnum.NO_PERMISSION.getErrorMsg());
 //        }
-        return JsonUtils.objectToJson(result);
+        return result;
     }
 
 
@@ -99,34 +99,34 @@ public class CoreAdminController {
 
 
     @DeleteMapping("deleteUser")
-    public String deleteUser(String id) {
+    public ResultData deleteUser(String id) {
         Long aLong = Long.valueOf(id);
         boolean b = coreAdminService.deleteUserById(aLong);
         ResultData result = new ResultData();
         result.setStatus(b == true ? 200 : 500);
         result.setMsg(b == false ? "删除失败" : "删除成功");
-        return JsonUtils.objectToJson(result);
+        return result;
     }
 
     @PostMapping("addUser")
-    public String addUser(@RequestBody CoreAdmin user) {
+    public ResultData addUser(@RequestBody CoreAdmin user) {
         ResultData result = new ResultData();
         user.setCreateTime(new Date());
         int i = coreAdminService.addUser(user);
         result.setStatus(i == 1 ? 200 : 500);
         result.setMsg(i == 0 ? "新增失败" : "新增成功");
-        return JsonUtils.objectToJson(result);
+        return result;
     }
 
     @PostMapping("updateUser")
-    public String updateUser(@RequestBody CoreAdmin user) {
+    public ResultData updateUser(@RequestBody CoreAdmin user) {
         ResultData result = new ResultData();
 
         user.setUpdateTime(new Date());
         int i = coreAdminService.updateUser(user);
         result.setStatus(i == 1 ? 200 : 500);
         result.setMsg(i == 0 ? "修改失败" : "修改成功");
-        return JsonUtils.objectToJson(result);
+        return result;
     }
 
 }

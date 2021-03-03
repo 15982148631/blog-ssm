@@ -48,17 +48,17 @@ public class CorePostController {
 
     @RequiresPermissions("113")
     @PostMapping("/getPostByKey")
-    public String  test(String id){
+    public ResultData  test(String id){
         Long aLong = Long.valueOf(id);
         CorePost user = corePostService.getCorePostByPrimerkey(aLong);
         logger.info("用户获取ID为："+id+"的数据为："+ JsonUtils.objectToJson(user).toString());
 
         if (user != null){
             ResultData result = new ResultData(user);
-            return JsonUtils.objectToJson(result);
+            return result;
         }
         ResultData result = new  ResultData(ErrorEnum.NOT_FOUND.getErrorCode(), ErrorEnum.NOT_FOUND.getErrorMsg(),null);
-        return JsonUtils.objectToJson(result);
+        return result;
     }
 
 
@@ -94,33 +94,33 @@ public class CorePostController {
 
 
     @DeleteMapping("/deletePost")
-    public String deleteUser(String id) {
+    public ResultData deleteUser(String id) {
         Long aLong = Long.valueOf(id);
         boolean b = corePostService.deletePostById(aLong);
         ResultData result = new ResultData();
         result.setStatus(b == true ? 200 : 500);
         result.setMsg(b == false ? "删除失败" : "删除成功");
-        return JsonUtils.objectToJson(result);
+        return result;
     }
 
     @PostMapping("/addPost")
-    public String addUser(@RequestBody CorePost post) {
+    public ResultData addUser(@RequestBody CorePost post) {
         ResultData result = new ResultData();
         post.setCreateTime(new Date());
         int i = corePostService.addPost(post);
         result.setStatus(i == 1 ? 200 : 500);
         result.setMsg(i == 0 ? "新增失败" : "新增成功");
-        return JsonUtils.objectToJson(result);
+        return result;
     }
 
     @PostMapping("/updatePost")
-    public String updateUser(@RequestBody CorePost post) {
+    public ResultData updateUser(@RequestBody CorePost post) {
         ResultData result = new ResultData();
 
         post.setUpdateTime(new Date());
         int i = corePostService.updatePost(post);
         result.setStatus(i == 1 ? 200 : 500);
         result.setMsg(i == 0 ? "修改失败" : "修改成功");
-        return JsonUtils.objectToJson(result);
+        return result;
     }
 }

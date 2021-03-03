@@ -3,6 +3,7 @@ package com.wyf.blog.ssm.pojo.vo;
 import com.wyf.blog.ssm.exception.BusinessException;
 import com.wyf.blog.ssm.exception.ErrorEnum;
 import lombok.Data;
+import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
 
@@ -17,6 +18,11 @@ public class ResultData implements Serializable{
      * @date 2018年7月10日
      */
     private static final long serialVersionUID = -2496672594279324524L;
+
+    /**
+     * 默认失败响应码
+     */
+    private static final Integer DEAFAULT_FAILURE_CODE = HttpStatus.INTERNAL_SERVER_ERROR.value();
 
     /**是否成功*/
     private Boolean success;
@@ -54,6 +60,20 @@ public class ResultData implements Serializable{
         this.data = data;
     }
 
+    public static ResultData failure(String msg) {
+        ResultData result = new ResultData();
+        result.setMsg(msg);
+        result.status = DEAFAULT_FAILURE_CODE;
+        return result;
+    }
+
+    public static ResultData failure(int code,String msg ,Object data) {
+        ResultData result = new ResultData();
+        result.setMsg(msg);
+        result.setStatus(code);
+        result.setData(data);
+        return result;
+    }
 
     public static ResultData ok(Object data) {
         return new ResultData(data);

@@ -17,7 +17,7 @@ import java.io.Serializable;
  * <li>默认处理方法慎用，前台最想要拿到的还是具体的结果码和信息。</li>
  * </ul>
  * <p>
- * @author ：leigq <br>
+ * @author ：wyf <br>
  * 创建时间：2017年10月9日 下午3:26:17 <br>
  * <p>
  * 修改人： <br>
@@ -64,7 +64,7 @@ public class Response implements Serializable {
      * @param msg  处理结果信息
      * @return 响应对象
      * <p>
-     * @author ：LeiGQ <br>
+     * @author ：wyf <br>
      * @date ：2019-05-20 15:25 <br>
      */
     public Response success(String msg) {
@@ -79,7 +79,7 @@ public class Response implements Serializable {
      * @param data 返回数据
      * @return 响应对象
      * <p>
-     * @author ：LeiGQ <br>
+     * @author ：wyf <br>
      * @date ：2019-05-20 15:25 <br>
      */
     public Response success(Object data) {
@@ -95,7 +95,7 @@ public class Response implements Serializable {
      * @param data 返回数据
      * @return 响应对象
      * <p>
-     * @author ：LeiGQ <br>
+     * @author ：wyf <br>
      * @date ：2019-05-20 15:25 <br>
      */
     public Response success(String msg, Object data) {
@@ -112,7 +112,7 @@ public class Response implements Serializable {
      * @param data 返回数据
      * @return 响应对象
      * <p>
-     * @author ：LeiGQ <br>
+     * @author ：wyf <br>
      * @date ：2019-05-20 15:25 <br>
      */
     public Response success(HttpStatus httpStatus, String msg, Object data) {
@@ -130,7 +130,7 @@ public class Response implements Serializable {
      * @param msg 处理结果信息
      * @return 响应对象
      * <p>
-     * @author ：LeiGQ <br>
+     * @author ：wyf <br>
      * @date ：2019-05-20 15:22 <br>
      */
     public Response failure(String msg) {
@@ -145,7 +145,7 @@ public class Response implements Serializable {
      * @param data 返回数据
      * @return 响应对象
      * <p>
-     * @author ：LeiGQ <br>
+     * @author ：wyf <br>
      * @date ：2019-05-20 15:22 <br>
      */
     public Response failure(Object data) {
@@ -161,7 +161,7 @@ public class Response implements Serializable {
      * @param data 返回数据
      * @return 响应对象
      * <p>
-     * @author ：LeiGQ <br>
+     * @author ：wyf <br>
      * @date ：2019-05-20 15:22 <br>
      */
     public Response failure(String msg, Object data) {
@@ -178,7 +178,7 @@ public class Response implements Serializable {
      * @param data 返回数据
      * @return 响应对象
      * <p>
-     * @author ：LeiGQ <br>
+     * @author ：wyf <br>
      * @date ：2019-05-20 15:22 <br>
      */
     public Response failure(HttpStatus httpStatus, String msg, Object data) {

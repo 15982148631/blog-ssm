@@ -4,6 +4,7 @@ import com.wyf.blog.ssm.config.ThreadPoolConfig;
 import com.wyf.blog.ssm.exception.ErrorEnum;
 import com.wyf.blog.ssm.pojo.domain.CoreAdmin;
 import com.wyf.blog.ssm.pojo.vo.CacheUser;
+import com.wyf.blog.ssm.pojo.vo.Request;
 import com.wyf.blog.ssm.pojo.vo.ResultData;
 import com.wyf.blog.ssm.service.api.LoginService;
 import com.wyf.blog.ssm.utils.JsonUtils;
@@ -18,6 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 /**
@@ -47,18 +51,18 @@ public class LoginController {
      **/
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public String login(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("remember") String remember) {
-
+    public ResultData login(@RequestBody Request req) {
+        String username = req.getUsername();
+        String password = req.getPassword();
+        String remember = req.getRemember();
         logger.info("时间戳:" + System.currentTimeMillis() + "-->登录用户：" + username);
         if (StringUtils.isEmpty(username)) {
-            ResultData result = new ResultData(-1, "用户名未填写", null);
-            return JsonUtils.objectToJson(result);
+            return new ResultData(-1, "用户名未填写", null);
         }
 
 
         if (StringUtils.isEmpty(password)) {
-            ResultData result = new ResultData(-1, "密码未填写", null);
-            return JsonUtils.objectToJson(result);
+            return new ResultData(-1, "密码未填写", null);
         }
 
 
@@ -76,33 +80,25 @@ public class LoginController {
         try {
             subject.login(token);
         } catch (UnknownAccountException uae) {
-            ResultData result = new ResultData(-1, "未知账户", null);
-            return JsonUtils.objectToJson(result);
+            return new ResultData(-1, "未知账户", null);
         } catch (IncorrectCredentialsException ice) {
-            ResultData result = new  ResultData(-1, "密码不正确",null);
-            return JsonUtils.objectToJson(result);
+            return new  ResultData(-1, "密码不正确",null);
         } catch (LockedAccountException lae) {
-            ResultData result = new ResultData(-1, "账户已锁定", null);
-            return JsonUtils.objectToJson(result);
+            return new ResultData(-1, "账户已锁定", null);
         } catch (ExcessiveAttemptsException eae) {
-            ResultData result = new ResultData(-1, "用户名或密码错误次数过多", null);
-            return JsonUtils.objectToJson(result);
-        }
-        catch (AuthenticationException ae) {
-            ResultData result = new  ResultData(-1, "用户名或密码不正确！",null);
-            return JsonUtils.objectToJson(result);
+            return new ResultData(-1, "用户名或密码错误次数过多", null);
+        } catch (AuthenticationException ae) {
+            return new  ResultData(-1, "用户名或密码不正确！",null);
         }
 
         if (subject.isAuthenticated()) {
             CoreAdmin user = (CoreAdmin) subject.getPrincipals().getPrimaryPrincipal();
             cacheUser = CacheUser.builder().token(subject.getSession().getId().toString()).build();
             BeanUtils.copyProperties(user, cacheUser);
-            ResultData result = new ResultData(200, "登录成功", cacheUser);
-            return JsonUtils.objectToJson(result);
+            return new ResultData(200, "登录成功", cacheUser);
         } else {
             token.clear();
-            ResultData result = new ResultData(-1, "登录失败", null);
-            return JsonUtils.objectToJson(result);
+            return new ResultData(-1, "登录失败", null);
         }
 
     }
@@ -124,7 +120,7 @@ public class LoginController {
     /**
      * 未登录，shiro应重定向到登录界面，此处返回未登录状态信息由前端控制跳转页面
      * <br/>
-     * create by: leigq
+     * create by: wyf
      * <br/>
      * create time: 2019/7/3 14:53
      * @return
@@ -138,7 +134,7 @@ public class LoginController {
 
     /**
      * 未授权，无权限，此处返回未授权状态信息由前端控制跳转页面
-     * create by: leigq
+     * create by: wyf
      * create time: 2019/7/3 14:53
      * @return
      */

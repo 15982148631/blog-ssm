@@ -54,10 +54,10 @@ public class GlobalExceptionHandler {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public Response handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
+    public ResultData handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
         String msg = "缺少请求参数！";
         log.error(msg, e);
-        return new Response().failure(msg);
+        return new ResultData().failure(msg);
     }
 
     /**
@@ -65,10 +65,10 @@ public class GlobalExceptionHandler {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public Response handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+    public ResultData handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         String msg = e.getMessage();
         log.error("参数解析失败：", e);
-        return new Response().failure(msg);
+        return new ResultData().failure(msg);
     }
 
     /**
@@ -76,10 +76,10 @@ public class GlobalExceptionHandler {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Response handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public ResultData handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         String msg = handleBindingResult(e.getBindingResult());
         log.error("方法参数无效: ", e);
-        return new Response().failure(msg);
+        return new ResultData().failure(msg);
     }
 
     /**
@@ -87,10 +87,10 @@ public class GlobalExceptionHandler {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
-    public Response handleBindException(BindException e) {
+    public ResultData handleBindException(BindException e) {
         String msg = handleBindingResult(e.getBindingResult());
         log.error("参数绑定失败:", e);
-        return new Response().failure(msg);
+        return new ResultData().failure(msg);
     }
 
     /**
@@ -98,11 +98,11 @@ public class GlobalExceptionHandler {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
-    public Response handleServiceException(ConstraintViolationException e) {
+    public ResultData handleServiceException(ConstraintViolationException e) {
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
         String msg = violations.iterator().next().getMessage();
         log.error("参数验证失败:", e);
-        return new Response().failure(msg);
+        return new ResultData().failure(msg);
     }
 
     /**
@@ -110,10 +110,10 @@ public class GlobalExceptionHandler {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ValidationException.class)
-    public Response handleValidationException(ValidationException e) {
+    public ResultData handleValidationException(ValidationException e) {
         String msg = e.getMessage();
         log.error("参数验证失败：", e);
-        return new Response().failure(msg);
+        return new ResultData().failure(msg);
     }
 
     /**
@@ -121,10 +121,10 @@ public class GlobalExceptionHandler {
      */
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(LoginException.class)
-    public Response handleLoginException(LoginException e) {
+    public ResultData handleLoginException(LoginException e) {
         String msg = e.getMessage();
         log.error("登录异常：", e);
-        return new Response().failure(msg);
+        return new ResultData().failure(msg);
     }
 
     /**
@@ -132,10 +132,10 @@ public class GlobalExceptionHandler {
      */
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(UnauthorizedException.class)
-    public Response handleLoginException(UnauthorizedException e) {
+    public ResultData handleLoginException(UnauthorizedException e) {
         String msg = e.getMessage();
         log.error("用户无权限：", e);
-        return new Response().failure(HttpStatus.FORBIDDEN, "用户无权限!", null);
+        return new ResultData().failure(HttpStatus.FORBIDDEN.value(), "用户无权限!", null);
     }
 
     /**
@@ -143,10 +143,10 @@ public class GlobalExceptionHandler {
      */
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public Response handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+    public ResultData handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         String msg = "不支持当前请求方法！";
         log.error(msg, e);
-        return new Response().failure(msg);
+        return new ResultData().failure(msg);
     }
 
     /**
@@ -154,10 +154,10 @@ public class GlobalExceptionHandler {
      */
     @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public Response handleHttpMediaTypeNotSupportedException(Exception e) {
+    public ResultData handleHttpMediaTypeNotSupportedException(Exception e) {
         String msg = "不支持当前媒体类型！";
         log.error(msg, e);
-        return new Response().failure(msg);
+        return new ResultData().failure(msg);
     }
 
     /**
@@ -165,10 +165,10 @@ public class GlobalExceptionHandler {
      */
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public Response handleMaxUploadSizeExceededException(Exception e) {
+    public ResultData handleMaxUploadSizeExceededException(Exception e) {
         String msg = "所上传文件大小超过最大限制，上传失败！";
         log.error(msg, e);
-        return new Response().failure(msg);
+        return new ResultData().failure(msg);
     }
 
     /**
@@ -176,10 +176,10 @@ public class GlobalExceptionHandler {
      */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(ServiceNotFoundException.class)
-    public Response handleServiceException(ServiceNotFoundException e) {
+    public ResultData handleServiceException(ServiceNotFoundException e) {
         String msg = "服务内部异常：" + e.getMessage();
         log.error(msg, e);
-        return new Response().failure(msg);
+        return new ResultData().failure(msg);
     }
 
     /**
@@ -187,10 +187,10 @@ public class GlobalExceptionHandler {
      */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
-    public Response handleException(Exception e) {
+    public ResultData handleException(Exception e) {
         String msg = "服务内部异常！" + e.getMessage();
         log.error(msg, e);
-        return new Response().failure(msg);
+        return new ResultData().failure(msg);
     }
 
 

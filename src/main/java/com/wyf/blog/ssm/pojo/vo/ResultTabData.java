@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 类名称：  ResultTabData
  * 功能描述: 将后台数据转换成指定表格数据格式
- * 创建者：  xiaowang
+ * 创建者：  wyf
  * 创建时间：2019/3/20
  */
 @Data
