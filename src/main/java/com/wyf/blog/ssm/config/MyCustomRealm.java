@@ -79,7 +79,7 @@ public class MyCustomRealm extends AuthorizingRealm {
         //根据用户名从数据库获取密码
         CoreAdmin admin = new CoreAdmin();
         admin.setNickname(userName);
-        admin.setPassword(ShiroUtils.MD5Pwd(userName,userPwd));
+        //admin.setPassword(ShiroUtils.MD5Pwd(userName,userPwd));
         CoreAdmin user = coreAdminService.getAdminByExample(admin);
 
         if (user == null) {

@@ -1,12 +1,16 @@
 package com.wyf.blog.ssm.service.impl;
 
 import com.github.pagehelper.PageInfo;
+import com.wyf.blog.ssm.pojo.dto.CoreAdminDto;
+import com.wyf.blog.ssm.pojo.vo.ResultTabData;
 import com.wyf.blog.ssm.utils.JsonUtils;
 import com.wyf.blog.ssm.utils.enums.RedisStaticStr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import com.wyf.blog.ssm.mapper.CoreAdminMapper;
@@ -56,7 +60,6 @@ public class CoreAdminServiceImpl implements CoreAdminService{
         Example example = new Example(CoreAdmin.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("nickname",admin.getNickname());
-        criteria.andEqualTo("password",admin.getPassword());
         List<CoreAdmin> coreAdmins = coreAdminMapper.selectByExample(example);
         if (coreAdmins == null || coreAdmins.size()!=1){
             return null;
@@ -66,8 +69,13 @@ public class CoreAdminServiceImpl implements CoreAdminService{
 
 
     @Override
-    public PageInfo page(int i, int i1, CoreAdmin tbUser) {
-        PageInfo pageInfo=new PageInfo(coreAdminMapper.selectAll());
+    public PageInfo page(int pageNum, int pageSize, CoreAdmin tbUser) {
+
+        PageInfo pageInfo=new PageInfo(coreAdminMapper.selectList((pageNum - 1) * pageSize, pageNum * pageSize));
+
+        int count = coreAdminMapper.selectCount(tbUser);
+        pageInfo.setSize(count);
+
         return pageInfo;
     }
 
@@ -90,6 +98,11 @@ public class CoreAdminServiceImpl implements CoreAdminService{
         return coreAdminMapper.updateByPrimaryKey(user);
     }
 
+    @Override
+    public int getAdminCount(CoreAdmin admin) {
+
+        return coreAdminMapper.selectCount(admin);
+    }
 
 
     @Override

@@ -2,9 +2,11 @@ package com.wyf.blog.ssm.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.util.StringUtil;
 import com.wyf.blog.ssm.exception.ErrorEnum;
 import com.wyf.blog.ssm.pojo.domain.CoreAdmin;
 import com.wyf.blog.ssm.pojo.dto.CoreAdminDto;
+import com.wyf.blog.ssm.pojo.vo.Request;
 import com.wyf.blog.ssm.pojo.vo.ResultData;
 import com.wyf.blog.ssm.pojo.vo.ResultTabData;
 import com.wyf.blog.ssm.service.api.CoreAdminService;
@@ -14,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -75,26 +78,34 @@ public class CoreAdminController {
      * @auther: Administrator
      * @date: 2020/6/27 15:33
      */
-    @GetMapping(value = "getsysUserList")
-    public ResponseEntity<Object> test(String sysUser, int page, int rows) throws JsonProcessingException {
-        CoreAdmin CoreAdmin = new CoreAdmin(); //JsonUtils.jsonToPojo(sysUser, CoreAdmin.class);
-        PageInfo pageInfo = coreAdminService.page(page, rows, CoreAdmin);
-        //分页后结果集
-        List<CoreAdminDto> list = pageInfo.getList();
-
-        if (0 != list.size()) {
-            List<CoreAdmin> tbList = new ArrayList<>();
-            for (int i = 0; i < list.size(); i++) {
-                tbList.add(new CoreAdminDto(list.get(i)));
-            }
-
-            ResultTabData result = new ResultTabData();
-            result.setData(tbList);
-            result.setPage(page);
-            result.setTotal(list.size());
-            return new ResponseEntity<Object>(result, HttpStatus.OK);
+    @PostMapping(value = "getsysUserList")
+    @ResponseBody
+    public ResultData getsysUserList(@RequestBody Request req){
+        int page =  req.getPageNum();
+        int rows = req.getPageSize();
+        String sysUser = req.getUserStr();
+        CoreAdmin cAdmin = new CoreAdmin();
+        if (StringUtil.isNotEmpty(sysUser)){
+            cAdmin = JsonUtils.jsonToPojo(sysUser, CoreAdmin.class);
         }
-        return null;
+
+        PageInfo pageInfo = coreAdminService.page(page, rows, cAdmin);
+        return new ResultData(ErrorEnum.SUCCESS.getErrorCode(),ErrorEnum.SUCCESS.getErrorMsg(),pageInfo);
+    }
+
+
+    /***
+     * @Author wyf
+     * @Description 获取管理员数量
+     * @Date  2021/3/5 17:45
+     * @Param []
+     * @return com.wyf.blog.ssm.pojo.vo.ResultData
+     **/
+    @GetMapping(value = "getCount")
+    public ResultData getCount() {
+        CoreAdmin admin = new CoreAdmin();
+        int count = coreAdminService.getAdminCount(admin);
+        return new ResultData(ErrorEnum.SUCCESS.getErrorCode(),ErrorEnum.SUCCESS.getErrorMsg(),count);
     }
 
 

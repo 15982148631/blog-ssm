@@ -1,5 +1,7 @@
 package com.wyf.blog.ssm.service.api;
 
+import com.wyf.blog.ssm.pojo.vo.CacheUser;
+
 import java.util.List;
 
 /**
@@ -29,4 +31,13 @@ public interface LoginService {
      * @return void
      **/
     void logout();
+
+    /**
+     * @Author wyf
+     * @Description 获取已登录用户信息
+     * @Date  2021/3/4 15:18
+     * @Param []
+     * @return com.wyf.blog.ssm.pojo.vo.CacheUser
+     **/
+    CacheUser getUserSession();
 }

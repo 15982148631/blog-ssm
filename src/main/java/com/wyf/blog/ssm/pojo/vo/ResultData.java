@@ -41,6 +41,12 @@ public class ResultData implements Serializable{
 
     }
 
+
+    public ResultData(Integer status, String msg) {
+        this.status = status;
+        this.msg = msg;
+    }
+
     public ResultData(Integer status, String msg, Object data) {
         this.status = status;
         this.msg = msg;

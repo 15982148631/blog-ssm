@@ -61,6 +61,15 @@ public interface CoreAdminService{
     int updateUser(CoreAdmin user);
 
 
+    /***
+     * @Author wyf
+     * @Description 获取管理员数量
+     * @Date  2021/3/5 17:46
+     * @Param []
+     * @return int
+     **/
+    int getAdminCount(CoreAdmin admin);
+
     @Deprecated//过时使用注解
     int getAdmin(long id);
 

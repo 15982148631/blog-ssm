@@ -21,6 +21,16 @@
     update_time
   </sql>
 
+  <sql id="Noauth_Column_List">
+    <!--@mbg.generated generated on Sat Feb 20 14:14:10 CST 2021.-->
+    id, username, nickname, email, url, `status`,  create_time,
+    update_time
+  </sql>
 
 
+  <select id="selectList" parameterType="integer" resultType="com.wyf.blog.ssm.pojo.domain.CoreAdmin">
+    select
+    <include refid="Noauth_Column_List" />
+    from core_admin limit #{param1},#{param2}
+  </select>
 </mapper>

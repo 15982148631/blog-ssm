@@ -4,9 +4,11 @@ import com.wyf.blog.ssm.mapper.CoreAdminMapper;
 import com.wyf.blog.ssm.mapper.CoreAuthMapper;
 import com.wyf.blog.ssm.mapper.CoreRoleMapper;
 import com.wyf.blog.ssm.pojo.domain.CoreAdmin;
+import com.wyf.blog.ssm.pojo.vo.CacheUser;
 import com.wyf.blog.ssm.service.api.LoginService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,6 +55,17 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public void logout() {
         Subject subject = SecurityUtils.getSubject();
-        subject.logout();
+        if(subject.isAuthenticated()) {
+            subject.logout();
+        }
+    }
+
+    @Override
+    public CacheUser getUserSession() {
+        Subject subject = SecurityUtils.getSubject();
+        CoreAdmin user = (CoreAdmin) subject.getPrincipals().getPrimaryPrincipal();
+        CacheUser cacheUser = CacheUser.builder().token(subject.getSession().getId().toString()).build();
+        BeanUtils.copyProperties(user, cacheUser);
+        return cacheUser;
     }
 }

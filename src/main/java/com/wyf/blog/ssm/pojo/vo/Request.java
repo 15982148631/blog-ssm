@@ -19,4 +19,10 @@ public class Request implements Serializable {
     private String password;
 
     private String remember;
+
+    private Integer pageNum;//当前页
+
+    private Integer pageSize;//单页条数
+
+    private String userStr;
 }

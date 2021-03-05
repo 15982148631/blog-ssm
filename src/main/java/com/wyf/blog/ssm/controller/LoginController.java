@@ -109,12 +109,24 @@ public class LoginController {
      * create time: 2019/6/28 17:37
      */
     @GetMapping("/logout")
+    @ResponseBody
     public ResultData logOut() {
         //ThreadPoolConfig.executor.execute(()-> System.out.println("test"));
 
         loginService.logout();
         return new ResultData(ErrorEnum.SUCCESS.getErrorCode(), ErrorEnum.SUCCESS.getErrorMsg(), new Object());
     }
+
+    @GetMapping("/userSession")
+    @ResponseBody
+    public ResultData userSession() {
+        CacheUser cacheUser = loginService.getUserSession();
+        if (cacheUser == null){
+            return new ResultData(ErrorEnum.NO_AUTH.getErrorCode(),ErrorEnum.NO_AUTH.getErrorMsg());
+        }
+        return new ResultData(ErrorEnum.SUCCESS.getErrorCode(), ErrorEnum.SUCCESS.getErrorMsg(), cacheUser);
+    }
+
 
 
     /**

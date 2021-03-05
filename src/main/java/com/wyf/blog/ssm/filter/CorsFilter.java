@@ -15,7 +15,7 @@ import java.io.IOException;
  * @Date 2021/2/22 9:59
  * @Version 1.0.0
  */
-@Component
+//@Component
 @Slf4j
 public class CorsFilter implements Filter {
 
