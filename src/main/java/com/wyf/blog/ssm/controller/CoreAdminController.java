@@ -1,6 +1,5 @@
 package com.wyf.blog.ssm.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.wyf.blog.ssm.exception.ErrorEnum;
@@ -8,27 +7,22 @@ import com.wyf.blog.ssm.pojo.domain.CoreAdmin;
 import com.wyf.blog.ssm.pojo.dto.CoreAdminDto;
 import com.wyf.blog.ssm.pojo.vo.Request;
 import com.wyf.blog.ssm.pojo.vo.ResultData;
-import com.wyf.blog.ssm.pojo.vo.ResultTabData;
 import com.wyf.blog.ssm.service.api.CoreAdminService;
 import com.wyf.blog.ssm.utils.JsonUtils;
+import com.wyf.blog.ssm.utils.ShiroUtils;
 import io.swagger.annotations.Api;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 
 /**
  * @Author wyf
  * @ClassName UserController
- * @Description //TODO
  * @Date 2021/2/9 17:55
  * @Version 1.0.0
  */
@@ -51,22 +45,13 @@ public class CoreAdminController {
      * @return java.lang.String
      **/
     @PostMapping("/getUserByKey")
-    public ResultData  test(String id){
-        Long aLong = Long.valueOf(id);
-        //coreAdminService.getAdmin(aLong);
-        CoreAdmin user = coreAdminService.getAdminByPrimerkey(aLong);
-        logger.info("用户获取ID为："+id+"的数据为："+ JsonUtils.objectToJson(user).toString());
-
+    public ResultData  getUserByKey(@RequestBody Request req){
+        CoreAdmin user = coreAdminService.getAdminByPrimerkey(req.getId());
+        logger.info("用户获取ID为："+req.getId()+"的数据为："+ JsonUtils.objectToJson(user));
         if (user != null){
-            ResultData result = new ResultData(user);
-            return result;
+            return new ResultData(ErrorEnum.SUCCESS.getErrorCode(),ErrorEnum.SUCCESS.getErrorMsg(),user);
         }
-        ResultData result = new  ResultData(ErrorEnum.NOT_FOUND.getErrorCode(), ErrorEnum.NOT_FOUND.getErrorMsg(),null);
-        //全局自定义异常：
-//        if (user == null){
-//            throw new BusinessException(ErrorEnum.NO_PERMISSION.getErrorCode(), ErrorEnum.NO_PERMISSION.getErrorMsg());
-//        }
-        return result;
+        return new  ResultData(ErrorEnum.NOT_FOUND.getErrorCode(), ErrorEnum.NOT_FOUND.getErrorMsg(),null);
     }
 
 
@@ -79,7 +64,6 @@ public class CoreAdminController {
      * @date: 2020/6/27 15:33
      */
     @PostMapping(value = "getsysUserList")
-    @ResponseBody
     public ResultData getsysUserList(@RequestBody Request req){
         int page =  req.getPageNum();
         int rows = req.getPageSize();
@@ -101,43 +85,66 @@ public class CoreAdminController {
      * @Param []
      * @return com.wyf.blog.ssm.pojo.vo.ResultData
      **/
-    @GetMapping(value = "getCount")
-    public ResultData getCount() {
+    @GetMapping(value = "getAdminCount")
+    public ResultData getAdminCount() {
         CoreAdmin admin = new CoreAdmin();
         int count = coreAdminService.getAdminCount(admin);
         return new ResultData(ErrorEnum.SUCCESS.getErrorCode(),ErrorEnum.SUCCESS.getErrorMsg(),count);
     }
 
 
+    /***
+     * @Author wyf
+     * @Description 删除管理员
+     * @Date  2021/3/8 8:49
+     * @Param [id]
+     * @return com.wyf.blog.ssm.pojo.vo.ResultData
+     **/
+    @RequiresPermissions("115")
     @DeleteMapping("deleteUser")
-    public ResultData deleteUser(String id) {
-        Long aLong = Long.valueOf(id);
-        boolean b = coreAdminService.deleteUserById(aLong);
-        ResultData result = new ResultData();
-        result.setStatus(b == true ? 200 : 500);
-        result.setMsg(b == false ? "删除失败" : "删除成功");
-        return result;
+    public ResultData deleteUser(@RequestBody Request req) {
+        boolean isDel = coreAdminService.deleteUserById(req.getId());
+        if(isDel){
+            return new ResultData(ErrorEnum.SUCCESS.getErrorCode(),ErrorEnum.SUCCESS.getErrorMsg(),null);
+        }
+        return new ResultData(ErrorEnum.FAIL.getErrorCode(),ErrorEnum.FAIL.getErrorMsg(),null);
     }
 
+    /***
+     * @Author wyf
+     * @Description 新增管理员
+     * @Date  2021/3/8 8:49
+     * @Param [user]
+     * @return com.wyf.blog.ssm.pojo.vo.ResultData
+     **/
+    @RequiresPermissions("114")
     @PostMapping("addUser")
-    public ResultData addUser(@RequestBody CoreAdmin user) {
-        ResultData result = new ResultData();
+    public ResultData addUser(@RequestBody CoreAdminDto user) {
         user.setCreateTime(new Date());
+        user.setPassword(ShiroUtils.MD5Pwd(user.getNickname(),user.getPassword()));
         int i = coreAdminService.addUser(user);
-        result.setStatus(i == 1 ? 200 : 500);
-        result.setMsg(i == 0 ? "新增失败" : "新增成功");
-        return result;
+        if(i == 1){
+            return new ResultData(ErrorEnum.SUCCESS.getErrorCode(),ErrorEnum.SUCCESS.getErrorMsg(),null);
+        }
+        return new ResultData(ErrorEnum.FAIL.getErrorCode(),ErrorEnum.FAIL.getErrorMsg(),null);
     }
 
+    /***
+     * @Author wyf
+     * @Description 修改管理员
+     * @Date  2021/3/8 8:49
+     * @Param [user]
+     * @return com.wyf.blog.ssm.pojo.vo.ResultData
+     **/
+    @RequiresPermissions("116")
     @PostMapping("updateUser")
-    public ResultData updateUser(@RequestBody CoreAdmin user) {
-        ResultData result = new ResultData();
-
+    public ResultData updateUser(@RequestBody CoreAdminDto user) {
         user.setUpdateTime(new Date());
         int i = coreAdminService.updateUser(user);
-        result.setStatus(i == 1 ? 200 : 500);
-        result.setMsg(i == 0 ? "修改失败" : "修改成功");
-        return result;
+        if(i == 1){
+            return new ResultData(ErrorEnum.SUCCESS.getErrorCode(),ErrorEnum.SUCCESS.getErrorMsg(),null);
+        }
+        return new ResultData(ErrorEnum.FAIL.getErrorCode(),ErrorEnum.FAIL.getErrorMsg(),null);
     }
 
 }

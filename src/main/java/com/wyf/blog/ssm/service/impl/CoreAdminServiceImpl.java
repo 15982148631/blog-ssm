@@ -70,8 +70,8 @@ public class CoreAdminServiceImpl implements CoreAdminService{
 
     @Override
     public PageInfo page(int pageNum, int pageSize, CoreAdmin tbUser) {
-
-        PageInfo pageInfo=new PageInfo(coreAdminMapper.selectList((pageNum - 1) * pageSize, pageNum * pageSize));
+        List<CoreAdmin> list = coreAdminMapper.selectList((pageNum - 1) * pageSize, pageNum * pageSize);
+        PageInfo pageInfo=new PageInfo(list);
 
         int count = coreAdminMapper.selectCount(tbUser);
         pageInfo.setSize(count);

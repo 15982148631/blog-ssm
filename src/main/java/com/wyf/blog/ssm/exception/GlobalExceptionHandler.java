@@ -1,6 +1,5 @@
 package com.wyf.blog.ssm.exception;
 
-import com.wyf.blog.ssm.pojo.vo.Response;
 import com.wyf.blog.ssm.pojo.vo.ResultData;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;

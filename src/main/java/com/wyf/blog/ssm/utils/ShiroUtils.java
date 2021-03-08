@@ -29,6 +29,6 @@ public class ShiroUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(MD5Pwd("admin","123456"));
+        System.out.println(MD5Pwd("zs1","123456"));
     }
 }

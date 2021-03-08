@@ -104,10 +104,13 @@ public class LoginController {
     }
 
 
-    /**
-     * description: 登出
-     * create time: 2019/6/28 17:37
-     */
+    /***
+     * @Author wyf
+     * @Description 退出
+     * @Date  2021/3/8 9:10
+     * @Param []
+     * @return com.wyf.blog.ssm.pojo.vo.ResultData
+     **/
     @GetMapping("/logout")
     @ResponseBody
     public ResultData logOut() {
@@ -117,6 +120,13 @@ public class LoginController {
         return new ResultData(ErrorEnum.SUCCESS.getErrorCode(), ErrorEnum.SUCCESS.getErrorMsg(), new Object());
     }
 
+    /***
+     * @Author wyf
+     * @Description 检查获取已登录信息
+     * @Date  2021/3/8 9:10
+     * @Param []
+     * @return com.wyf.blog.ssm.pojo.vo.ResultData
+     **/
     @GetMapping("/userSession")
     @ResponseBody
     public ResultData userSession() {
@@ -128,15 +138,13 @@ public class LoginController {
     }
 
 
-
-    /**
-     * 未登录，shiro应重定向到登录界面，此处返回未登录状态信息由前端控制跳转页面
-     * <br/>
-     * create by: wyf
-     * <br/>
-     * create time: 2019/7/3 14:53
-     * @return
-     */
+    /***
+     * @Author wyf
+     * @Description 未登录，shir处理为此处返回未登录状态信息由前端控制跳转页面
+     * @Date  2021/3/8 9:09
+     * @Param []
+     * @return com.wyf.blog.ssm.pojo.vo.ResultData
+     **/
     @RequestMapping("/unLogin")
     @ResponseBody
     public ResultData unLogin() {
@@ -144,12 +152,14 @@ public class LoginController {
         return  new ResultData(ErrorEnum.NO_AUTH.getErrorCode(), ErrorEnum.NO_AUTH.getErrorMsg(), new Object());
     }
 
-    /**
-     * 未授权，无权限，此处返回未授权状态信息由前端控制跳转页面
-     * create by: wyf
-     * create time: 2019/7/3 14:53
-     * @return
-     */
+
+    /***
+     * @Author wyf
+     * @Description 未授权，无权限，此处返回未授权状态信息由前端控制跳转页面
+     * @Date  2021/3/8 9:08
+     * @Param []
+     * @return com.wyf.blog.ssm.pojo.vo.ResultData
+     **/
     @RequestMapping("/unauthorized")
     @ResponseBody
     public ResultData unauthorized() {

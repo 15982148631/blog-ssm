@@ -28,7 +28,7 @@
   </sql>
 
 
-  <select id="selectList" parameterType="integer" resultType="com.wyf.blog.ssm.pojo.domain.CoreAdmin">
+  <select id="selectList" parameterType="integer" resultMap="BaseResultMap">
     select
     <include refid="Noauth_Column_List" />
     from core_admin limit #{param1},#{param2}

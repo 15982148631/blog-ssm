@@ -11,6 +11,7 @@ public enum ErrorEnum {
 
     // 数据操作错误定义
     SUCCESS(200, "成功"),
+    FAIL(201, "失败"),
     NO_PERMISSION(403,"你没得权限"),
     NO_AUTH(401,"未登录"),
     NOT_FOUND(404, "未找到该资源!"),
