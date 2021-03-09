@@ -1,4 +1,4 @@
-package com.wyf.blog.ssm.config;
+package com.wyf.blog.ssm.config.redis;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;

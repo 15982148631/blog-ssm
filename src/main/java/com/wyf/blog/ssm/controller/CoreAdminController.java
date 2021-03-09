@@ -2,6 +2,7 @@ package com.wyf.blog.ssm.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
+import com.wyf.blog.ssm.config.redis.BloomFilterInit;
 import com.wyf.blog.ssm.exception.ErrorEnum;
 import com.wyf.blog.ssm.pojo.domain.CoreAdmin;
 import com.wyf.blog.ssm.pojo.dto.CoreAdminDto;
@@ -14,6 +15,7 @@ import io.swagger.annotations.Api;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -37,6 +39,9 @@ public class CoreAdminController {
     @Resource
     private CoreAdminService coreAdminService;
 
+    @Autowired
+    private BloomFilterInit bloomFilterInit;
+
     /***
      * @Author wyf
      * @Description 获取指定管理员信息
@@ -46,8 +51,15 @@ public class CoreAdminController {
      **/
     @PostMapping("/getUserByKey")
     public ResultData  getUserByKey(@RequestBody Request req){
-        CoreAdmin user = coreAdminService.getAdminByPrimerkey(req.getId());
-        logger.info("用户获取ID为："+req.getId()+"的数据为："+ JsonUtils.objectToJson(user));
+        Long id = req.getId();
+
+        if(id < 0 || !bloomFilterInit.getIntegerBloomFilter().mightContain(id.intValue())){
+            logger.info("该userId: "+id+" 在布隆过滤器中不存在！");
+            return new  ResultData(ErrorEnum.NOT_FOUND.getErrorCode(), ErrorEnum.NOT_FOUND.getErrorMsg(),null);
+        }
+
+        CoreAdmin user = coreAdminService.getAdminByPrimerkey(id);
+        logger.info("用户获取ID为："+id+"的数据为："+ JsonUtils.objectToJson(user));
         if (user != null){
             return new ResultData(ErrorEnum.SUCCESS.getErrorCode(),ErrorEnum.SUCCESS.getErrorMsg(),user);
         }

@@ -17,7 +17,6 @@ import tk.mybatis.spring.annotation.MapperScan;
 @EnableOpenApi//开启swagger
 @EnableTransactionManagement//开启事务
 @MapperScan(basePackages = "com.wyf.blog.ssm.mapper")//开启mybatis扫描
-
 public class SsmApp {
 
     public static void main(String[] args) {

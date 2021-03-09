@@ -10,5 +10,7 @@ import java.util.List;
 @Repository
 public interface CoreAdminMapper extends MyMapper<CoreAdmin> {
 
-    List selectList(int i, int i1);
+    List<CoreAdmin> selectList(int i, int i1);
+
+    List<Long> selectAllOfIds();
 }

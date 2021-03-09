@@ -27,6 +27,10 @@
     update_time
   </sql>
 
+  <select id="selectAllOfIds" resultType="long">
+    select id from core_admin order  by create_time desc
+  </select>
+
 
   <select id="selectList" parameterType="integer" resultMap="BaseResultMap">
     select
