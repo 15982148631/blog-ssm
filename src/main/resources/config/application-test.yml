@@ -1,37 +1,54 @@
-mybatis-plus:
-    configuration:
-        map-underscore-to-camel-case: true
-        use-generated-keys: true
-    mapper-locations: classpath*:/mappers/**/*.xml
-    type-aliases-package: com.leigq.www.shiro.domain.entity
 server:
-    tomcat:
-        uri-encoding: UTF-8
+    port: 8097
+
 spring:
+    application:
+        name: ssmBlog-service
     datasource:
-        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000;config.decrypt=true;config.decrypt.key=MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKPYsCl3alwZlRb1vKoFdVu0LP3Nm/+vH5iOWxI83pkUbrQc13Lxz/VT3D+H+ziaUpUsA+ZjG4iZGTDJWZnP8kcCAwEAAQ==
+        type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver
-        filters: config,stat,wall,slf4j
-        initialSize: 5
-        maxActive: 20
-        maxPoolPreparedStatementPerConnectionSize: 20
-        maxWait: 60000
-        minEvictableIdleTimeMillis: 300000
-        minIdle: 5
-        password: kGJF6c+pzVsf49LGs01ss0yijBGXIpNEp20cMkNCQo3ONaeMNPeoW9M89v+nGeiWs95/D2Ms59uGyydDGUWpmg==
-        poolPreparedStatements: true
-        testOnBorrow: false
-        testOnReturn: false
-        testWhileIdle: true
-        timeBetweenEvictionRunsMillis: 60000
-        type: com.alibaba.druid.pool.DruidDataSource
-        url: jdbc:mysql://localhost:3306/shiro?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=true&serverTimezone=UTC
+        url: jdbc:mysql://192.168.0.110:3306/sys?serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&nullNamePatternMatchesAll=true&zeroDateTimeBehavior=CONVERT_TO_NULL&tinyInt1isBit=false&autoReconnect=true&useSSL=false&pinGlobalTxToPhysicalConnection=true
         username: root
-        validationQuery: SELECT 1 FROM DUAL
-    thymeleaf:
-      cache: false
+        password: 123456
+        hikari:
+            minimum-idle: 5
+            idle-timeout: 600000
+            maximum-pool-size: 10
+            auto-commit: true
+            pool-name: MyHikariCP
+            max-lifetime: 1800000
+            connection-timeout: 30000
+            connection-test-query: SELECT 1
     redis:
-      host: localhost
-      port: 6379
-      timeout: 2000s
-      password: 111111
+        host: 192.168.0.110
+        port: 6379
+        database: 0
+        jedis:
+            pool:
+                max-active: 8
+                max-wait: -1
+                max-idle: 5
+                min-idle: 0
+        timeout: 2000
+    jackson:
+        date-format: yyyy-MM-dd
+        time-zone: GMT+8
+
+mybatis:
+    type-aliases-package: com.wyf.blog.ssm.domain
+    mapper-locations: classpath:mapper/*.xml
+
+
+#打印MybatisSql
+#  file: log/server.log
+logging:
+    config: classpath:logback-spring.xml
+    level:
+        com:
+          wyf:
+            blog:
+              ssm:
+                mapper: debug
+        org:
+            mybatis: debug
+#  config: classpath:logback.xml

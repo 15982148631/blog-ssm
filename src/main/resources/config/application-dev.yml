@@ -43,10 +43,13 @@ mybatis:
 #打印MybatisSql
 #  file: log/server.log
 logging:
+    config: classpath:logback-spring.xml
     level:
         com:
-            wyf:
-                blog:
-                    ssm:
-                        mapper: debug
+          wyf:
+            blog:
+              ssm:
+                mapper: debug
+        org:
+            mybatis: debug
 #  config: classpath:logback.xml
